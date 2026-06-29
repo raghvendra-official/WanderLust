@@ -30,7 +30,30 @@ router.route("/login")
 
 //Login Submit
 //router.post("/login",saveRedirectUrl , passport.authenticate("local",{failureRedirect:'/login', failureFlash: true}), wrapAsync(login));
+// =====================================================
+// ADD THESE TWO ROUTES HERE
+// =====================================================
 
+// Redirect user to Google
+router.get(
+    "/auth/google",
+    passport.authenticate("google", {
+        scope: ["profile", "email"]
+    })
+);
+
+// Google callback
+router.get(
+    "/auth/google/callback",
+    passport.authenticate("google", {
+        failureRedirect: "/login",
+        failureFlash: true
+    }),
+    (req, res) => {
+        req.flash("success", "Welcome to WanderLust!");
+        res.redirect("/listings");
+    }
+);
 //Logout
 router.get("/logout", logout);
 

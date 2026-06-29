@@ -5,10 +5,12 @@ const passportLocalMongoose = require('passport-local-mongoose').default || requ
 
 const userSchema = new Schema({
 
-    email:{
+        email:{
         type:String,
         required:true
     },
+
+    googleId:String,
 
     wishlist:[
         {

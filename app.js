@@ -26,6 +26,7 @@ const store = MongoStore.create({
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const GoogleStrategy=require("passport-google-oauth20").Strategy;
 const User = require("./models/user.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 
@@ -33,6 +34,7 @@ const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const wishlistRouter = require("./routes/wishlist");
+const newsletterRouter=require("./routes/newsletter");
 
 main()
   .then((res) => {
@@ -76,6 +78,61 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
+passport.use(
+
+new GoogleStrategy(
+
+{
+
+clientID:process.env.GOOGLE_CLIENT_ID,
+
+clientSecret:process.env.GOOGLE_CLIENT_SECRET,
+
+callbackURL:"/auth/google/callback"
+
+},
+
+async(accessToken,refreshToken,profile,done)=>{
+
+try{
+
+let user=await User.findOne({
+
+googleId:profile.id
+
+});
+
+if(user){
+
+return done(null,user);
+
+}
+
+user=await User.create({
+
+googleId:profile.id,
+
+username:profile.displayName,
+
+email:profile.emails[0].value
+
+});
+
+done(null,user);
+
+}
+
+catch(err){
+
+done(err,null);
+
+}
+
+}
+
+)
+
+);
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -109,6 +166,7 @@ app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 app.use("/wishlist", wishlistRouter);
+app.use("/newsletter",newsletterRouter);
 
 // 404 handler
 app.use((req, res, next) => {
