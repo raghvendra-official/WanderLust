@@ -62,7 +62,7 @@
           type="search"
           name="search"
           placeholder="Search destination..."
-          value="<%= search || '' %>">
+          value="<%= search %>">
 
         <button class="btn search-btn ms-2" type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -75,7 +75,7 @@
       <div class="navbar-nav">
 
         <a class="nav-link" href="/listings/new">
-          Airbnb your home
+          Add listings
         </a>
 
         <% if(!currUser){ %>
@@ -84,9 +84,14 @@
 
           <a class="nav-link" href="/login"><b>Log in</b></a>
 
+
         <% } else { %>
 
           <a class="nav-link" href="/logout"><b>Log out</b></a>
+          <a class="nav-link" href="/wishlist">
+    <i class="fa-solid fa-heart"></i>
+    Wishlist
+</a>
 
         <% } %>
 

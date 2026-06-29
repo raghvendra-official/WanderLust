@@ -1,6 +1,6 @@
 const Listing = require("../models/listing.js");
 
-
+const User = require("../models/user.js");
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
@@ -71,13 +71,37 @@ module.exports.editForm = async (req, res) => {
 };
 
 module.exports.showListing = async (req, res) => {
+
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate({ path: "reviews", populate: { path: "author" } }).populate("owner");
+
+    const listing = await Listing.findById(id)
+        .populate({
+            path: "reviews",
+            populate: { path: "author" }
+        })
+        .populate("owner");
+
     if (!listing) {
-        req.flash("error", "Listing you requested for does not exist!");
-        res.render("/listings");
+        req.flash("error", "Listing you requested does not exist!");
+        return res.redirect("/listings");
     }
-    res.render("listings/show.ejs", { listing })
+
+    let isWishlisted = false;
+
+    if (req.user) {
+
+        const user = await User.findById(req.user._id);
+
+        isWishlisted = user.wishlist.some((item) =>
+            item.equals(listing._id)
+        );
+
+    }
+
+    res.render("listings/show.ejs", {
+        listing,
+        isWishlisted
+    });
 
 };
 
