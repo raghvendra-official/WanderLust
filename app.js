@@ -166,3 +166,13 @@ app.use((err, req, res, next) => {
 app.listen("8080", () => {
   console.log("server is listening to port 8080");
 });
+
+
+// Health Check Route
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "OK",
+        uptime: process.uptime(),
+        timestamp: new Date()
+    });
+});
