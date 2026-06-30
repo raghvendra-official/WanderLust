@@ -150,6 +150,9 @@ app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 app.use("/wishlist", wishlistRouter);
 app.use("/newsletter", newsletterRouter);
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 
 // 404 handler
 app.use((req, res, next) => {
