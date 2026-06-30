@@ -8,21 +8,22 @@ module.exports.subscribe = async (req, res) => {
 
     if (exists) {
       req.flash("error", "You're already subscribed with this email.");
-
-      return res.redirect("back");
+      return res.redirect(req.get("Referrer") || "/listings");
     }
 
     await Newsletter.create({ email });
 
     req.flash(
       "success",
-      "Thanks for subscribing! Check your inbox for travel inspiration.",
+      "Thanks for subscribing! Check your inbox for travel inspiration."
     );
 
     res.redirect(req.get("Referrer") || "/listings");
-  } catch (err) {
-    req.flash("error", "Subscription failed.");
 
-    res.redirect("back");
+  } catch (err) {
+    console.error("Newsletter Subscription Error:", err);
+
+    req.flash("error", "Subscription failed.");
+    res.redirect(req.get("Referrer") || "/listings");
   }
 };

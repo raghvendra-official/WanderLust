@@ -10,7 +10,7 @@ const map = new mapboxgl.Map({
 
 console.log(coordinates);
 
-const marker1 = new mapboxgl.Marker({ color: "red" })
+ new mapboxgl.Marker({ color: "red" })
   .setLngLat(coordinates)
   .setPopup(
     new mapboxgl.Popup({ offset: 25 })

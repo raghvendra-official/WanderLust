@@ -37,7 +37,7 @@ const wishlistRouter = require("./routes/wishlist");
 const newsletterRouter = require("./routes/newsletter");
 
 main()
-  .then((res) => {
+  .then(() => {
     console.log("connection sussessful");
   })
   .catch((err) => console.log(err));
@@ -157,10 +157,9 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong" } = err;
-  res.render("error.ejs", { err });
-  // res.status(statusCode).send(message);
+app.use((err, req, res) => {
+    res.status(err.statusCode || 500);
+    res.render("error.ejs", { err });
 });
 
 app.listen("8080", () => {

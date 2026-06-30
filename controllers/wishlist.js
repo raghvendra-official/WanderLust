@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const Listing = require("../models/listing");
+
 
 module.exports.addWishlist = async (req, res) => {
   let { id } = req.params;
