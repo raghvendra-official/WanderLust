@@ -1,34 +1,20 @@
-const express=require("express");
-const router=express.Router();
+const express = require("express");
+const router = express.Router();
 
-const wrapAsync=require("../utils/wrapAsync");
+const wrapAsync = require("../utils/wrapAsync");
 
-const {isLoggedIn}=require("../middleware");
+const { isLoggedIn } = require("../middleware");
 
 const {
+  addWishlist,
+  removeWishlist,
+  showWishlist,
+} = require("../controllers/wishlist");
 
-addWishlist,
-removeWishlist,
-showWishlist
+router.get("/", isLoggedIn, wrapAsync(showWishlist));
 
-}=require("../controllers/wishlist");
+router.post("/:id", isLoggedIn, wrapAsync(addWishlist));
 
-router.get(
-"/",
-isLoggedIn,
-wrapAsync(showWishlist)
-);
+router.delete("/:id", isLoggedIn, wrapAsync(removeWishlist));
 
-router.post(
-"/:id",
-isLoggedIn,
-wrapAsync(addWishlist)
-);
-
-router.delete(
-"/:id",
-isLoggedIn,
-wrapAsync(removeWishlist)
-);
-
-module.exports=router;
+module.exports = router;

@@ -1,11 +1,11 @@
-const express=require("express");
+const express = require("express");
 
-const router=express.Router();
+const router = express.Router();
 
-const wrapAsync=require("../utils/wrapAsync");
+const wrapAsync = require("../utils/wrapAsync");
 
-const {subscribe}=require("../controllers/newsletter");
+const { subscribe } = require("../controllers/newsletter");
 
-router.post("/",wrapAsync(subscribe));
+router.post("/", wrapAsync(subscribe));
 
-module.exports=router;
+module.exports = router;

@@ -1,35 +1,28 @@
 const Newsletter = require("../models/newsletter");
 
-module.exports.subscribe = async(req,res)=>{
+module.exports.subscribe = async (req, res) => {
+  try {
+    const { email } = req.body;
 
-    try{
+    const exists = await Newsletter.findOne({ email });
 
-        const {email}=req.body;
+    if (exists) {
+      req.flash("error", "You're already subscribed with this email.");
 
-        const exists = await Newsletter.findOne({email});
-
-        if(exists){
-
-            req.flash("error","You're already subscribed with this email.");
-
-            return res.redirect("back");
-
-        }
-
-        await Newsletter.create({email});
-
-        req.flash("success","Thanks for subscribing! Check your inbox for travel inspiration.");
-
-        res.redirect(req.get("Referrer") || "/listings");
-
+      return res.redirect("back");
     }
 
-    catch(err){
+    await Newsletter.create({ email });
 
-        req.flash("error","Subscription failed.");
+    req.flash(
+      "success",
+      "Thanks for subscribing! Check your inbox for travel inspiration.",
+    );
 
-        res.redirect("back");
+    res.redirect(req.get("Referrer") || "/listings");
+  } catch (err) {
+    req.flash("error", "Subscription failed.");
 
-    }
-
-}
+    res.redirect("back");
+  }
+};
