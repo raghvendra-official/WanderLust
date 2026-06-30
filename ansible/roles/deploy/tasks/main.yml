@@ -1,0 +1,29 @@
+- name: Create application directory
+  file:
+    path: /opt/wanderlust
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+
+- name: Copy .env file
+  template:
+    src: env.j2
+    dest: /opt/wanderlust/.env
+    mode: '0600'
+
+- name: Pull latest image
+  command: docker pull raghvendraofficial/wanderlust:latest
+
+- name: Stop old container
+  command: docker rm -f wanderlust
+  ignore_errors: yes
+
+- name: Start WanderLust
+  command: >
+      docker run -d
+      --name wanderlust
+      --restart always
+      --env-file /opt/wanderlust/.env
+      -p 80:8080
+      raghvendraofficial/wanderlust:latest

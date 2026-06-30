@@ -30,10 +30,10 @@ RUN npm prune --production
 EXPOSE 8080
 
 HEALTHCHECK \
-  --interval=30s \
-  --timeout=5s \
-  --start-period=10s \
-  CMD wget --spider http://localhost:8080/health || exit 1
+--interval=30s \
+--timeout=5s \
+--start-period=10s \
+CMD wget --spider http://localhost:8080/listings || exit 1
 
 # Start Application
 CMD ["npm", "start"]

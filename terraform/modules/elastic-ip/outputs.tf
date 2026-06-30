@@ -1,5 +1,7 @@
-resource "aws_eip" "this" {
+output "public_ip" {
+  value = aws_eip.this.public_ip
+}
 
-  instance = var.instance_id
-
+output "allocation_id" {
+  value = aws_eip.this.id
 }
